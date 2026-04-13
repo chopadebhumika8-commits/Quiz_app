@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Quiz</title>
+<link rel="stylesheet" href="/static/style.css">
+
+<style>
+.option {
+    text-align: left;
+    background: #f9f9f9;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.option:hover {
+    background: #e0f0ff;
+}
+
+.progress {
+    background: #ddd;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.progress-bar {
+    height: 20px;
+    background: #28a745;
+    color: white;
+    text-align: center;
+    border-radius: 10px;
+}
+</style>
+
+</head>
+<body>
+
+<div class="box">
+
+<!-- Progress Bar -->
+<div class="progress">
+    <div class="progress-bar" style="width: {{ progress }}%;">
+        {{ progress }}%
+    </div>
+</div>
+
+<form method="post">
+
+    <!-- ✅ FIXED LINE -->
+    <h3>📄 {{ question.question }}</h3>
+
+    <label class="option">
+        <input type="radio" name="answer" value="{{ question.option1 }}" required>
+        {{ question.option1 }}
+    </label>
+
+    <label class="option">
+        <input type="radio" name="answer" value="{{ question.option2 }}">
+        {{ question.option2 }}
+    </label>
+
+    <label class="option">
+        <input type="radio" name="answer" value="{{ question.option3 }}">
+        {{ question.option3 }}
+    </label>
+
+    <label class="option">
+        <input type="radio" name="answer" value="{{ question.option4 }}">
+        {{ question.option4 }}
+    </label>
+
+    <button type="submit">➡ Next</button>
+
+</form>
+
+<!-- Timer -->
+<p id="timer">⏱ 20 sec</p>
+
+</div>
+
+<script>
+let t = 20;
+let timer = setInterval(()=>{
+    t--;
+    document.getElementById("timer").innerText = "⏱ " + t + " sec";
+
+    if(t <= 0){
+        clearInterval(timer);
+        document.forms[0].submit();
+    }
+},1000);
+</script>
+
+</body>
+</html>
