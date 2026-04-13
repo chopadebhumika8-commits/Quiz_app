@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Profile</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="box">
+
+<h2>👤 My Profile</h2>
+
+<h3>Welcome, {{ user }} 👋</h3>
+
+<hr>
+
+<p>📊 Total Quizzes: <b>{{ total_quiz }}</b></p>
+<p>🎯 Performance: <b>{{ percentage }}%</b></p>
+
+<hr>
+
+<h3>📚 Quiz History</h3>
+
+{% if history %}
+    {% for h in history %}
+        <div style="background:#f2f2f2; padding:10px; margin:5px; border-radius:8px;">
+            <p>🏆 Score: {{ h.score }} / {{ h.total }}</p>
+        </div>
+    {% endfor %}
+{% else %}
+    <p>No quiz attempted yet 😅</p>
+{% endif %}
+
+<br>
+
+<a href="/dashboard"><button type="button">🔙 Back to Dashboard</button></a>
+
+</div>
+
+</body>
+</html>
