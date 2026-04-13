@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Result</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="box">
+
+<h2>🎯 Quiz Result</h2>
+
+<p>🏆 Score: <b>{{ score }} / {{ total }}</b></p>
+<p>⏱ Time Taken: <b>{{ time_taken }} sec</b></p>
+<p>🥇 Rank: <b>#{{ rank }}</b></p>
+
+<hr>
+
+{% if score == total %}
+<p style="color:green;">🔥 Excellent! Perfect Score!</p>
+
+{% elif score > (total // 2) %}
+<p style="color:orange;">👍 Good Job!</p>
+
+{% else %}
+<p style="color:red;">😅 Try Again!</p>
+{% endif %}
+
+<hr>
+
+<h3>📚 Answer Review</h3>
+
+{% for a in answers %}
+<div style="background:#f2f2f2; padding:10px; margin:8px; border-radius:8px; text-align:left;">
+
+<p><b>❓ {{ a.question }}</b></p>
+
+<p>
+Your Answer: 
+<span style="color:{% if a.selected == a.correct %}green{% else %}red{% endif %};">
+{{ a.selected }}
+</span>
+</p>
+
+{% if a.selected != a.correct %}
+<p>✅ Correct Answer: <b>{{ a.correct }}</b></p>
+{% endif %}
+
+</div>
+{% endfor %}
+
+<br>
+
+<a href="/dashboard">
+<button>🔙 Back to Dashboard</button>
+</a>
+
+</div>
+
+</body>
+</html>
