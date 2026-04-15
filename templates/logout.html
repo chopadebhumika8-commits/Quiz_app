@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Logout</title>
+
+<!-- ✅ FIXED CSS -->
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="box">
+
+<h2>🚪 You have been logged out</h2>
+
+<p>Thank you for using Online Quiz System 😊</p>
+
+<br>
+
+<!-- ✅ FIXED LINK -->
+<a href="{{ url_for('login') }}">
+    <button type="button">🔐 Login Again</button>
+</a>
+
+</div>
+
+</body>
+</html>
