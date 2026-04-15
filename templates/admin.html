@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="box">
+<h2>⚙️ Add Question</h2>
+
+<!-- ADD QUESTION FORM -->
+<form method="post">
+
+<select name="subject" required>
+    <option value="DS">Data Structure</option>
+    <option value="PY">Python</option>
+</select>
+
+<select name="type" required>
+    <option value="simple">Simple</option>
+    <option value="advanced">Advanced</option>
+</select>
+
+<br><br>
+
+<input name="question" placeholder="Question" required><br><br>
+<input name="o1" placeholder="Option 1" required><br><br>
+<input name="o2" placeholder="Option 2" required><br><br>
+<input name="o3" placeholder="Option 3" required><br><br>
+<input name="o4" placeholder="Option 4" required><br><br>
+<input name="correct" placeholder="Correct Answer" required><br><br>
+
+<button type="submit">➕ Add Question</button>
+
+</form>
+
+<br>
+
+<!-- BACK BUTTON -->
+<a href="{{ url_for('dashboard') }}">
+    <button type="button">🔙 Back</button>
+</a>
+
+<hr>
+
+<h3>📋 All Questions</h3>
+
+<!-- QUESTIONS LIST -->
+{% for q in questions %}
+<div style="text-align:left; margin-bottom:15px;">
+
+    <p><b>{{ q.question }}</b></p>
+    <p>📘 {{ q.subject }} | 📂 {{ q.type }}</p>
+
+    <!-- EDIT -->
+    <a href="{{ url_for('edit', id=q.id) }}">
+        <button type="button">✏️ Edit</button>
+    </a>
+
+    <!-- DELETE -->
+    <a href="{{ url_for('delete', id=q.id) }}" onclick="return confirm('Delete this question?')">
+        <button type="button">🗑 Delete</button>
+    </a>
+
+</div>
+<hr>
+{% endfor %}
+
+</div>
+
+</body>
+</html>
