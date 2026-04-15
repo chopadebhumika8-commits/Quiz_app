@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Select Subject</title>
+
+<!-- ✅ FIXED CSS -->
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="box">
+<h2>📚 Choose Subject</h2>
+
+<!-- ✅ FIXED LINKS -->
+<a href="{{ url_for('select_type', subject='DS') }}">
+    <button>💻 Data Structure</button>
+</a>
+
+<a href="{{ url_for('select_type', subject='PY') }}">
+    <button>🐍 Python</button>
+</a>
+
+<br><br>
+
+<!-- ✅ BACK BUTTON -->
+<a href="{{ url_for('dashboard') }}">
+    <button>🔙 Back</button>
+</a>
+
+</div>
+
+</body>
+</html>
