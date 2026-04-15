@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Select Level</title>
+
+<!-- ✅ FIXED CSS -->
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="box">
+<h2>🎯 Select Level</h2>
+
+<!-- ✅ FIXED LINKS -->
+<a href="{{ url_for('quiz', subject=subject, type='simple') }}">
+    <button>🟢 Simple</button>
+</a>
+
+<a href="{{ url_for('quiz', subject=subject, type='advanced') }}">
+    <button>🔴 Advanced</button>
+</a>
+
+<br><br>
+
+<!-- ✅ BACK BUTTON -->
+<a href="{{ url_for('select_class') }}">
+    <button>🔙 Back</button>
+</a>
+
+</div>
+
+</body>
+</html>
