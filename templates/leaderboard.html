@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Leaderboard</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="box">
+<h2>🏆 Leaderboard</h2>
+
+<table border="1" width="100%">
+<tr>
+<th>Rank</th>
+<th>User</th>
+<th>Score</th>
+<th>Time</th>
+</tr>
+
+{% for i in range(data|length) %}
+<tr>
+<td>{{ i+1 }}</td>
+<td>{{ data[i].username }}</td>
+<td>{{ data[i].score }} / {{ data[i].total }}</td>
+<td>{{ data[i].time_taken }} sec</td>
+</tr>
+{% endfor %}
+
+</table>
+
+<br>
+
+<a href="{{ url_for('dashboard') }}">
+<button>🔙 Back</button>
+</a>
+
+</div>
+
+</body>
+</html>
