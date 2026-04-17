@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Dashboard</title>
+
+<link rel="stylesheet" href="/static/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+<style>
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.card-btn {
+    padding: 20px;
+    border-radius: 15px;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+    color: white;
+
+    transition: 0.3s;
+}
+
+.card-btn:hover {
+    transform: scale(1.05);
+}
+
+.full {
+    grid-column: span 2;
+    background: linear-gradient(135deg, #ff416c, #ff4b2b);
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="box">
+
+<h2>👋 Hello {{ session['user'] }}</h2>
+<p>Ready to play? 🚀</p>
+
+<div class="grid">
+
+<a href="/select_class">
+<button class="card-btn">🎯 Quiz</button>
+</a>
+
+<a href="/leaderboard">
+<button class="card-btn">🏆 Leaderboard</button>
+</a>
+
+<a href="/profile">
+<button class="card-btn">👤 Profile</button>
+</a>
+
+{% if session.get("admin") %}
+<a href="/admin">
+<button class="card-btn">⚙️ Admin</button>
+</a>
+{% else %}
+<a href="/admin_login">
+<button class="card-btn">🔐 Admin</button>
+</a>
+{% endif %}
+
+<a href="/logout">
+<button class="card-btn full">🚪 Logout</button>
+</a>
+
+</div>
+
+</div>
+
+</body>
+</html>
