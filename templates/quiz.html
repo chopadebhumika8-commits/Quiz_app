@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Quiz</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+<style>
+.timer {
+    color: #ff4d4d;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 10px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.progress {
+    height: 10px;
+    background: #00ffcc;
+    border-radius: 10px;
+}
+
+.option {
+    background: rgba(255,255,255,0.2);
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 12px;
+    display: block;
+    text-align: left;
+    cursor: pointer;
+}
+</style>
+
+<script>
+let time = {{ time_left }};
+
+function startTimer() {
+    let t = document.getElementById("time");
+
+    let x = setInterval(() => {
+        time--;
+        t.innerHTML = time;
+
+        if (time <= 0) {
+            clearInterval(x);
+            document.getElementById("quizForm").submit();
+        }
+    }, 1000);
+}
+</script>
+
+</head>
+
+<body onload="startTimer()">
+
+<div class="box">
+
+<div class="progress-bar">
+    <div class="progress" style="width: {{ progress }}%"></div>
+</div>
+
+<p class="timer">⏱ Time Left: <span id="time">{{ time_left }}</span> sec</p>
+
+<h3>❓ {{ question.question }}</h3>
+
+<form method="post" id="quizForm">
+
+<label class="option">
+<input type="radio" name="answer" value="{{ question.option1 }}" required>
+{{ question.option1 }}
+</label>
+
+<label class="option">
+<input type="radio" name="answer" value="{{ question.option2 }}">
+{{ question.option2 }}
+</label>
+
+<label class="option">
+<input type="radio" name="answer" value="{{ question.option3 }}">
+{{ question.option3 }}
+</label>
+
+<label class="option">
+<input type="radio" name="answer" value="{{ question.option4 }}">
+{{ question.option4 }}
+</label>
+
+<button type="submit">➡ Next</button>
+
+</form>
+
+</div>
+
+</body>
+</html>
