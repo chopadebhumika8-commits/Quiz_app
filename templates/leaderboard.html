@@ -2,7 +2,10 @@
 <html>
 <head>
 <title>Leaderboard</title>
+
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
 </head>
 <body>
 
@@ -10,35 +13,36 @@
 
 <h2>🏆 Leaderboard</h2>
 
+<table border="1" width="100%" style="border-collapse: collapse; text-align:center;">
+
+<tr>
+    <th>Rank</th>
+    <th>User</th>
+    <th>Score</th>
+    <th>Time</th>
+</tr>
+
 {% if users %}
-<table style="width:100%; text-align:center; color:white;">
-
+    {% for u in users %}
+    <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ u.username }}</td>
+        <td>{{ u.score }}/{{ u.total }}</td>
+        <td>{{ u.time_taken }} sec</td>
+    </tr>
+    {% endfor %}
+{% else %}
 <tr>
-<th>Rank</th>
-<th>User</th>
-<th>Score</th>
-<th>Time</th>
+    <td colspan="4">No data available</td>
 </tr>
-
-{% for u in users %}
-<tr>
-<td>{{ loop.index }}</td>
-<td>{{ u.username }}</td>
-<td>{{ u.score }}/{{ u.total }}</td>
-<td>{{ u.time_taken }} sec</td>
-</tr>
-{% endfor %}
+{% endif %}
 
 </table>
-
-{% else %}
-<p>No data available</p>
-{% endif %}
 
 <br>
 
 <a href="{{ url_for('dashboard') }}">
-<button>🔙 Back</button>
+    <button>🔙 Back</button>
 </a>
 
 </div>
