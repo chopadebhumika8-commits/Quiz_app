@@ -7,19 +7,16 @@ from werkzeug.security import generate_password_hash, check_password_hash
 app = Flask(__name__)
 app.secret_key = "secret123"
 
-# ---------------- ADMIN ----------------
-ADMIN_USERNAME = "admin"
-ADMIN_PASSWORD = "admin123"
+DB_PATH = "database.db"
 
 # ---------------- DATABASE ----------------
-DB_PATH = os.path.join(os.getcwd(), "database.db")
-
 def get_db():
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     return conn
 
 # ---------------- CREATE TABLES ----------------
+@app.before_request
 def create_tables():
     db = get_db()
     db.execute("CREATE TABLE IF NOT EXISTS users (username TEXT PRIMARY KEY, password TEXT)")
@@ -47,23 +44,18 @@ def create_tables():
     """)
     db.commit()
 
-create_tables()
-
 # ---------------- SIGNUP ----------------
 @app.route("/signup", methods=["GET","POST"])
 def signup():
     if request.method == "POST":
-        u = request.form.get("username","").strip()
-        p = request.form.get("password","").strip()
-
-        if not u or not p:
-            return "Fill all fields"
+        u = request.form["username"]
+        p = request.form["password"]
 
         db = get_db()
         try:
             db.execute("INSERT INTO users VALUES (?,?)", (u, generate_password_hash(p)))
             db.commit()
-            return redirect(url_for("login"))
+            return redirect("/")
         except:
             return "User already exists"
 
@@ -73,8 +65,8 @@ def signup():
 @app.route("/", methods=["GET","POST"])
 def login():
     if request.method == "POST":
-        u = request.form.get("username","").strip()
-        p = request.form.get("password","").strip()
+        u = request.form["username"]
+        p = request.form["password"]
 
         db = get_db()
         user = db.execute("SELECT * FROM users WHERE username=?", (u,)).fetchone()
@@ -82,7 +74,7 @@ def login():
         if user and check_password_hash(user["password"], p):
             session.clear()
             session["user"] = u
-            return redirect(url_for("dashboard"))
+            return redirect("/dashboard")
 
         return render_template("login.html", error="Invalid Login")
 
@@ -92,19 +84,113 @@ def login():
 @app.route("/dashboard")
 def dashboard():
     if "user" not in session:
-        return redirect(url_for("login"))
+        return redirect("/")
     return render_template("dashboard.html")
+
+# ---------------- QUIZ ----------------
+@app.route("/quiz/<subject>/<type>", methods=["GET","POST"])
+def quiz(subject, type):
+    if "user" not in session:
+        return redirect("/")
+
+    db = get_db()
+
+    questions = db.execute(
+        "SELECT * FROM questions WHERE subject=? AND type=?",
+        (subject, type)
+    ).fetchall()
+
+    if not questions:
+        return "No questions available"
+
+    if "index" not in session:
+        session["index"] = 0
+        session["score"] = 0
+        session["start"] = time.time()
+
+    i = session["index"]
+
+    if request.method == "POST":
+        selected = request.form.get("answer")
+        correct = questions[i]["correct"]
+
+        if selected == correct:
+            session["score"] += 1
+
+        session["index"] += 1
+        return redirect(f"/quiz/{subject}/{type}")
+
+    if i >= len(questions):
+        score = session["score"]
+        total = len(questions)
+        time_taken = int(time.time() - session["start"])
+
+        db.execute(
+            "INSERT INTO results (username, score, total, time_taken) VALUES (?,?,?,?)",
+            (session["user"], score, total, time_taken)
+        )
+        db.commit()
+
+        session.pop("index")
+        session.pop("score")
+        session.pop("start")
+
+        return redirect(url_for("result", score=score, total=total))
+
+    return render_template("quiz.html", question=questions[i])
+
+# ---------------- RESULT ----------------
+@app.route("/result")
+def result():
+    score = int(request.args.get("score", 0))
+    total = int(request.args.get("total", 0))
+
+    db = get_db()
+
+    users = db.execute("""
+        SELECT username, score, time_taken
+        FROM results
+        ORDER BY score DESC, time_taken ASC
+    """).fetchall()
+
+    rank = 1
+    for u in users:
+        if u["username"] == session.get("user") and u["score"] == score:
+            break
+        rank += 1
+
+    return render_template("result.html",
+        score=score,
+        total=total,
+        rank=rank
+    )
+
+# ---------------- LEADERBOARD ----------------
+@app.route("/leaderboard")
+def leaderboard():
+    if "user" not in session:
+        return redirect("/")
+
+    db = get_db()
+
+    users = db.execute("""
+        SELECT username, score, total, time_taken
+        FROM results
+        ORDER BY score DESC, time_taken ASC
+    """).fetchall()
+
+    return render_template("leaderboard.html", users=users)
 
 # ---------------- PROFILE ----------------
 @app.route("/profile")
 def profile():
     if "user" not in session:
-        return redirect(url_for("login"))
+        return redirect("/")
 
     db = get_db()
 
     history = db.execute(
-        "SELECT score, total FROM results WHERE username=?",
+        "SELECT score,total FROM results WHERE username=?",
         (session["user"],)
     ).fetchall()
 
@@ -116,158 +202,41 @@ def profile():
 
     return render_template("profile.html",
         user=session["user"],
-        history=history,
         total_quiz=total_quiz,
         percentage=percentage
-    )
-
-# ---------------- SELECT ----------------
-@app.route("/select_class")
-def select_class():
-    if "user" not in session:
-        return redirect(url_for("login"))
-    return render_template("select_class.html")
-
-@app.route("/select_type/<subject>")
-def select_type(subject):
-    if "user" not in session:
-        return redirect(url_for("login"))
-    return render_template("select_type.html", subject=subject)
-
-# ---------------- QUIZ ----------------
-@app.route("/quiz/<subject>/<type>", methods=["GET","POST"])
-def quiz(subject, type):
-    if "user" not in session:
-        return redirect(url_for("login"))
-
-    db = get_db()
-    questions = db.execute(
-        "SELECT * FROM questions WHERE LOWER(subject)=LOWER(?) AND LOWER(type)=LOWER(?)",
-        (subject, type)
-    ).fetchall()
-
-    if not questions:
-        return "No questions available"
-
-    if "index" not in session:
-        session["index"] = 0
-        session["score"] = 0
-        session["answers"] = []
-        session["start_time"] = time.time()
-
-    index = session.get("index", 0)
-
-    if request.method == "POST":
-        if index < len(questions):
-            selected = request.form.get("answer")
-            correct = questions[index]["correct"]
-
-            answers = session.get("answers", [])
-            answers.append({
-                "question": questions[index]["question"],
-                "selected": selected,
-                "correct": correct
-            })
-            session["answers"] = answers
-
-            if selected == correct:
-                session["score"] += 1
-
-        session["index"] = index + 1
-        return redirect(url_for("quiz", subject=subject, type=type))
-
-    if index >= len(questions):
-        score = session.get("score", 0)
-        total = len(questions)
-        time_taken = int(time.time() - session.get("start_time", time.time()))
-
-        db.execute(
-            "INSERT INTO results (username, score, total, time_taken) VALUES (?,?,?,?)",
-            (session["user"], score, total, time_taken)
-        )
-        db.commit()
-
-        # Rank Calculation
-        all_results = db.execute("""
-        SELECT username, score, time_taken
-        FROM results
-        ORDER BY score DESC, time_taken ASC
-        """).fetchall()
-
-        rank = 1
-        for r in all_results:
-            if r["username"] == session["user"] and r["score"] == score and r["time_taken"] == time_taken:
-                break
-            rank += 1
-
-        session["rank"] = rank
-        session["final_answers"] = session.get("answers", [])
-        session["time_taken"] = time_taken
-
-        session.pop("index", None)
-        session.pop("score", None)
-        session.pop("answers", None)
-        session.pop("start_time", None)
-
-        return redirect(url_for("result", score=score, total=total))
-
-    q = questions[index]
-    progress = int((index / len(questions)) * 100)
-
-    return render_template("quiz.html", question=q, progress=progress, time_left=60)
-
-# ---------------- RESULT ----------------
-@app.route("/result")
-def result():
-    return render_template("result.html",
-        score=int(request.args.get("score", 0)),
-        total=int(request.args.get("total", 0)),
-        answers=session.get("final_answers", []),
-        time_taken=session.get("time_taken", 0),
-        rank=session.get("rank", 0)
     )
 
 # ---------------- CERTIFICATE ----------------
 @app.route("/certificate")
 def certificate():
     if "user" not in session:
-        return redirect(url_for("login"))
+        return redirect("/")
+
+    db = get_db()
+
+    last = db.execute("""
+        SELECT score FROM results
+        WHERE username=?
+        ORDER BY id DESC LIMIT 1
+    """, (session["user"],)).fetchone()
+
+    score = last["score"] if last else 0
 
     return render_template("certificate.html",
         user=session["user"],
-        score=request.args.get("score", 0)
+        score=score
     )
-
-# ---------------- LEADERBOARD ----------------
-@app.route("/leaderboard")
-def leaderboard():
-    if "user" not in session:
-        return redirect(url_for("login"))
-
-    db = get_db()
-    users = db.execute("""
-    SELECT username, MAX(score) as score, MIN(time_taken) as time_taken
-    FROM results
-    GROUP BY username
-    ORDER BY score DESC, time_taken ASC
-    LIMIT 10
-    """).fetchall()
-
-    return render_template("leaderboard.html", users=users)
 
 # ---------------- ADMIN LOGIN ----------------
 @app.route("/admin_login", methods=["GET","POST"])
 def admin_login():
     if request.method == "POST":
-        u = request.form.get("username","").strip()
-        p = request.form.get("password","").strip()
-
-        if u == ADMIN_USERNAME and p == ADMIN_PASSWORD:
+        if request.form["username"] == "admin" and request.form["password"] == "admin123":
             session.clear()
             session["admin"] = True
-            return redirect(url_for("admin"))
+            return redirect("/admin")
 
-        return render_template("admin_login.html", error="Invalid Admin Login")
+        return render_template("admin_login.html", error="Invalid Login")
 
     return render_template("admin_login.html")
 
@@ -275,7 +244,7 @@ def admin_login():
 @app.route("/admin", methods=["GET","POST"])
 def admin():
     if "admin" not in session:
-        return redirect(url_for("admin_login"))
+        return redirect("/admin_login")
 
     db = get_db()
 
@@ -299,11 +268,22 @@ def admin():
     questions = db.execute("SELECT * FROM questions").fetchall()
     return render_template("admin.html", questions=questions)
 
+# ---------------- DELETE ----------------
+@app.route("/delete/<int:id>")
+def delete(id):
+    if "admin" not in session:
+        return redirect("/admin_login")
+
+    db = get_db()
+    db.execute("DELETE FROM questions WHERE id=?", (id,))
+    db.commit()
+    return redirect("/admin")
+
 # ---------------- EDIT ----------------
 @app.route("/edit/<int:id>", methods=["GET","POST"])
 def edit(id):
     if "admin" not in session:
-        return redirect(url_for("admin_login"))
+        return redirect("/admin_login")
 
     db = get_db()
 
@@ -322,21 +302,10 @@ def edit(id):
             id
         ))
         db.commit()
-        return redirect(url_for("admin"))
+        return redirect("/admin")
 
     q = db.execute("SELECT * FROM questions WHERE id=?", (id,)).fetchone()
     return render_template("edit.html", q=q)
-
-# ---------------- DELETE ----------------
-@app.route("/delete/<int:id>")
-def delete(id):
-    if "admin" not in session:
-        return redirect(url_for("admin_login"))
-
-    db = get_db()
-    db.execute("DELETE FROM questions WHERE id=?", (id,))
-    db.commit()
-    return redirect(url_for("admin"))
 
 # ---------------- ADMIN LOGOUT ----------------
 @app.route("/admin_logout")
@@ -348,7 +317,7 @@ def admin_logout():
 @app.route("/logout")
 def logout():
     session.clear()
-    return redirect(url_for("login"))
+    return redirect("/")
 
 # ---------------- RUN ----------------
 if __name__ == "__main__":
