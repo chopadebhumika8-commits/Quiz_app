@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Certificate</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+</head>
+
+<body style="text-align:center; font-family:'Poppins', sans-serif;">
+
+<div class="box">
+
+<h1>🎓 Certificate of Achievement</h1>
+
+<h3>This is to certify that</h3>
+
+<h1>{{ user }}</h1>
+
+<p>has successfully completed the quiz</p>
+
+<h2>Score: {{ score }} / {{ total }}</h2>
+
+<p>🏆 Rank: #{{ rank }}</p>
+
+<br><br>
+
+<p>✔ Verified by Quiz System</p>
+
+<a href="{{ url_for('dashboard') }}">
+    <button>🔙 Back to Dashboard</button>
+</a>
+
+</div>
+
+</body>
+</html>
