@@ -10,24 +10,30 @@
 
 <h2>🏆 Leaderboard</h2>
 
-<table style="width:100%; text-align:center; background:white; border-radius:10px;">
+{% if users %}
+<table style="width:100%; text-align:center; color:white;">
+
 <tr>
-    <th>Rank</th>
-    <th>User</th>
-    <th>Score</th>
-    <th>Time</th>
+<th>Rank</th>
+<th>User</th>
+<th>Score</th>
+<th>Time</th>
 </tr>
 
 {% for u in users %}
 <tr>
-    <td>{{ loop.index }}</td>
-    <td>{{ u.username }}</td>
-    <td>{{ u.score }}/{{ u.total }}</td>
-    <td>{{ u.time_taken }} sec</td>
+<td>{{ loop.index }}</td>
+<td>{{ u.username }}</td>
+<td>{{ u.score }}/{{ u.total }}</td>
+<td>{{ u.time_taken }} sec</td>
 </tr>
 {% endfor %}
 
 </table>
+
+{% else %}
+<p>No data available</p>
+{% endif %}
 
 <br>
 
