@@ -1,0 +1,149 @@
+/* 🌈 GLOBAL BACKGROUND */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 📦 MAIN CARD */
+.box {
+    width: 90%;
+    max-width: 420px;
+
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(15px);
+
+    padding: 25px;
+    border-radius: 20px;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+
+    text-align: center;
+    color: white;
+}
+
+/* 🏷 HEADINGS */
+h2, h3 {
+    margin-bottom: 15px;
+}
+
+/* 📊 PROGRESS BAR */
+.progress-bar {
+    width: 100%;
+    height: 10px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.progress {
+    height: 10px;
+    background: #00ffd5;
+    border-radius: 10px;
+}
+
+/* ⏱ TIMER */
+.timer {
+    color: #ff4d4d;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* 📋 OPTIONS */
+.option {
+    background: rgba(255,255,255,0.2);
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 12px;
+    text-align: left;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.option:hover {
+    background: rgba(255,255,255,0.35);
+}
+
+/* 🔘 RADIO BUTTON */
+input[type="radio"] {
+    margin-right: 10px;
+}
+
+/* 🔵 BUTTONS */
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 12px;
+
+    border: none;
+    border-radius: 12px;
+
+    background: linear-gradient(45deg, #00c6ff, #0072ff);
+    color: white;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+}
+
+/* 🧾 INPUT FIELDS */
+input, select {
+    width: 90%;
+    padding: 12px;
+    margin: 8px 0;
+
+    border: none;
+    border-radius: 10px;
+
+    outline: none;
+    font-size: 14px;
+}
+
+/* 📚 ANSWER CARD */
+.answer-box {
+    background: rgba(255,255,255,0.2);
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 12px;
+    text-align: left;
+}
+
+/* 🏆 SUCCESS / ERROR COLORS */
+.correct {
+    color: #00ff9d;
+}
+
+.wrong {
+    color: #ff4d4d;
+}
+
+/* 🔗 LINKS */
+a {
+    text-decoration: none;
+}
+
+/* 📱 MOBILE RESPONSIVE */
+@media (max-width: 500px) {
+    .box {
+        width: 95%;
+        padding: 20px;
+    }
+
+    button {
+        font-size: 14px;
+    }
+}
