@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Result</title>
+
+<!-- ✅ FIXED CSS -->
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="box">
+
+<h2>🎯 Quiz Result</h2>
+
+<p>🏆 Score: <b>{{ score }} / {{ total }}</b></p>
+<p>⏱ Time Taken: <b>{{ time_taken | default(0) }} sec</b></p>
+<p>🥇 Rank: <b>#{{ rank | default(0) }}</b></p>
+
+<hr>
+
+{% if score == total %}
+<p style="color:black;">🔥 Excellent! Perfect Score!</p>
+
+{% elif score > (total // 2) %}
+<p style="color:black;">👍 Good Job!</p>
+
+{% else %}
+<p style="color:black;">😅 Try Again!</p>
+{% endif %}
+
+<hr>
+
+<h3>📚 Answer Review</h3>
+
+{% if answers %}
+    {% for a in answers %}
+    <div style="background:linear-gradient; padding:18px; margin:10px; border-radius:10px; text-align:left;">
+
+    <p><b>❓ {{ a.question }}</b></p>
+
+    <p>
+    Your Answer:
+    <span style="color:{% if a.selected == a.correct %}black{% else %}red{% endif %};">
+    {{ a.selected }}
+    </span>
+    </p>
+
+    {% if a.selected != a.correct %}
+    <p>✅ Correct Answer: <b>{{ a.correct }}</b></p>
+    {% endif %}
+
+    </div>
+    {% endfor %}
+{% else %}
+    <p>No answers to display</p>
+{% endif %}
+
+<br>
+
+<!-- ✅ FIXED LINK -->
+<a href="{{ url_for('dashboard') }}">
+<button>🔙 Back to Dashboard</button>
+</a>
+
+</div>
+
+</body>
+</html>
