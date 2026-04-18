@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Result</title>
+<style>
+body {
+    font-family: Arial;
+    text-align: center;
+    background: #f5f5f5;
+}
+
+.box {
+    width: 60%;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    margin-top: 40px;
+    box-shadow: 0px 0px 10px #aaa;
+    border-radius: 10px;
+}
+
+button {
+    padding: 10px;
+    margin: 5px;
+    background: green;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+</style>
+</head>
+<body>
+
+<div class="box">
+
+<h1>🎯 Quiz Result</h1>
+
+<h2>Score: {{ score }} / {{ total }}</h2>
+
+<h3>⏱ Time Taken: {{ time_taken }} seconds</h3>
+
+<hr>
+
+<h3>📋 Review Answers</h3>
+
+{% for a in answers %}
+<p><b>Q:</b> {{ a.question }}</p>
+<p>✔ Your Answer: {{ a.selected }}</p>
+<p>✔ Correct Answer: {{ a.correct }}</p>
+<hr>
+{% endfor %}
+
+<br>
+
+<a href="/dashboard">
+    <button>🏠 Home</button>
+</a>
+
+<a href="/certificate">
+    <button>🎓 Certificate</button>
+</a>
+
+</div>
+
+</body>
+</html>
