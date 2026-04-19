@@ -6,27 +6,56 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
 
-</head>
+<style>
+body {
+    font-family: 'Poppins', sans-serif;
+}
 
+/* Result Box */
+.result-box {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+/* Answer Cards */
+.answer-card {
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 10px;
+    background: #f9f9f9;
+}
+</style>
+
+<!-- ✅ AUTO REDIRECT TO CERTIFICATE AFTER 3 SEC -->
+<script>
+setTimeout(function(){
+    window.location.href = "{{ url_for('certificate', score=score) }}";
+}, 3000);
+</script>
+
+</head>
 <body>
 
-<div class="box">
+<div class="box result-box">
 
 <h2>🎯 Quiz Result</h2>
 
 <p>🏆 Score: <b>{{ score }} / {{ total }}</b></p>
 <p>⏱ Time Taken: <b>{{ time_taken }} sec</b></p>
+<p>🥇 Rank: <b>#{{ rank }}</b></p>
 
 <hr>
 
 {% if score == total %}
-<p>🔥 Excellent! Perfect Score!</p>
+<p style="color:green;">🔥 Excellent! Perfect Score!</p>
 
 {% elif score > (total // 2) %}
-<p>👍 Good Job!</p>
+<p style="color:orange;">👍 Good Job!</p>
 
 {% else %}
-<p>😅 Try Again!</p>
+<p style="color:red;">😅 Try Again!</p>
 {% endif %}
 
 <hr>
@@ -35,13 +64,13 @@
 
 {% if answers %}
     {% for a in answers %}
-    <div style="background: rgba(255,255,255,0.2); padding:15px; margin:10px; border-radius:10px; text-align:left;">
+    <div class="answer-card">
 
         <p><b>❓ {{ a.question }}</b></p>
 
         <p>
         Your Answer:
-        <span style="color:{% if a.selected == a.correct %}lightgreen{% else %}red{% endif %};">
+        <span style="color:{% if a.selected == a.correct %}green{% else %}red{% endif %};">
         {{ a.selected }}
         </span>
         </p>
@@ -58,13 +87,18 @@
 
 <br>
 
-<a href="{{ url_for('dashboard') }}">
-<button>🏠 Home</button>
+<!-- BUTTONS -->
+<a href="{{ url_for('certificate', score=score) }}">
+    <button>🎓 View Certificate</button>
 </a>
 
-<a href="{{ url_for('certificate', score=score) }}">
-<button>🎓 Certificate</button>
+<a href="{{ url_for('dashboard') }}">
+    <button>🔙 Dashboard</button>
 </a>
+
+<p style="margin-top:10px; font-size:12px; color:gray;">
+📄 Certificate will open automatically...
+</p>
 
 </div>
 
