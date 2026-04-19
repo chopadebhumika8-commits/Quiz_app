@@ -3,36 +3,142 @@
 <head>
 <title>Certificate</title>
 
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+
+<style>
+
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Certificate Card */
+.certificate {
+    background: white;
+    padding: 40px;
+    width: 85%;
+    max-width: 750px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+    border: 8px solid gold;
+    position: relative;
+    animation: fadeIn 1.5s ease-in-out;
+}
+
+/* Shine Animation */
+.certificate::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.6), transparent);
+    animation: shine 3s infinite;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes shine {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+/* Heading */
+h1 {
+    font-size: 36px;
+    color: #333;
+}
+
+/* Name Highlight */
+.name {
+    font-size: 32px;
+    font-weight: bold;
+    color: #764ba2;
+    margin: 20px 0;
+}
+
+/* Score */
+.score {
+    font-size: 22px;
+    margin-top: 10px;
+}
+
+/* Footer */
+.footer {
+    margin-top: 30px;
+    color: gray;
+}
+
+/* Buttons */
+.btn {
+    margin-top: 20px;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 10px;
+    background: #667eea;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    margin-right: 10px;
+}
+
+.btn:hover {
+    background: #5a67d8;
+}
+
+</style>
 
 </head>
+<body>
 
-<body style="text-align:center; font-family:'Poppins', sans-serif;">
-
-<div class="box">
+<div class="certificate" id="certificate">
 
 <h1>🎓 Certificate of Achievement</h1>
 
-<h3>This is to certify that</h3>
+<p>This is to certify that</p>
 
-<h1>{{ user }}</h1>
+<div class="name">{{ user }}</div>
 
 <p>has successfully completed the quiz</p>
 
-<h2>Score: {{ score }} / {{ total }}</h2>
+<div class="score">🏆 Score: <b>{{ score }}</b></div>
 
-<p>🏆 Rank: #{{ rank }}</p>
+<div class="footer">
+✔ Verified by Quiz System
+</div>
 
-<br><br>
+<br>
 
-<p>✔ Verified by Quiz System</p>
+<!-- BUTTONS -->
+<button class="btn" onclick="downloadPDF()">⬇ Download PDF</button>
 
 <a href="{{ url_for('dashboard') }}">
-    <button>🔙 Back to Dashboard</button>
+    <button class="btn">🔙 Back</button>
 </a>
 
 </div>
+
+<!-- JS PDF LIBRARY -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<script>
+function downloadPDF() {
+    const element = document.getElementById("certificate");
+
+    html2pdf().from(element).save("certificate.pdf");
+}
+</script>
 
 </body>
 </html>
