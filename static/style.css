@@ -180,10 +180,14 @@ th {
 
 /* ===== CERTIFICATE FIX ===== */
 .certificate {
-    position: relative;
-    overflow: hidden;
-}
+    background: white !important;
+    color: #222 !important;
+    padding: 40px;
+    border-radius: 20px;
+    border: 8px solid gold;
+    text-align: center;
 
-.certificate::before {
-    display: none !important;
+    /* IMPORTANT for PDF visibility */
+    position: relative;
+    z-index: 1;
 }
