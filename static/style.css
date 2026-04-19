@@ -9,16 +9,40 @@ body {
     min-height: 100vh;
 }
 
-/* ===== MAIN CONTAINER ===== */
+/* ===== ANIMATION KEYFRAMES ===== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes buttonPop {
+    from {
+        transform: scale(0.9);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+/* ===== MAIN BOX ===== */
 .box {
     width: 90%;
-    max-width: 900px;        /* Bigger box */
+    max-width: 900px;
     background: rgba(255,255,255,0.95);
     padding: 35px;
     border-radius: 20px;
     box-shadow: 0 15px 40px rgba(0,0,0,0.25);
     text-align: center;
     backdrop-filter: blur(10px);
+
+    /* ✅ Animation applied */
+    animation: fadeIn 0.7s ease-in-out;
 }
 
 /* ===== HEADINGS ===== */
@@ -27,25 +51,17 @@ h1, h2, h3 {
     color: #333;
 }
 
-h1 {
-    font-size: 36px;
-}
-
-h2 {
-    font-size: 28px;
-}
-
-h3 {
-    font-size: 22px;
-}
+h1 { font-size: 36px; }
+h2 { font-size: 28px; }
+h3 { font-size: 22px; }
 
 /* ===== TEXT ===== */
 p {
-    font-size: 18px;         /* Bigger text */
+    font-size: 18px;
     color: #444;
 }
 
-/* ===== INPUT FIELDS ===== */
+/* ===== INPUT ===== */
 input, select {
     width: 90%;
     padding: 12px;
@@ -55,7 +71,7 @@ input, select {
     font-size: 16px;
 }
 
-/* ===== BUTTONS ===== */
+/* ===== BUTTON ===== */
 button {
     padding: 12px 20px;
     margin: 8px;
@@ -66,6 +82,9 @@ button {
     font-size: 16px;
     cursor: pointer;
     transition: 0.3s;
+
+    /* ✅ Button animation */
+    animation: buttonPop 0.4s ease;
 }
 
 button:hover {
@@ -73,7 +92,7 @@ button:hover {
     transform: scale(1.05);
 }
 
-/* ===== TABLE (LEADERBOARD) ===== */
+/* ===== TABLE ===== */
 table {
     width: 100%;
     margin-top: 15px;
@@ -102,6 +121,9 @@ tr:nth-child(even) {
     border-radius: 12px;
     background: #f9f9f9;
     border-left: 5px solid #667eea;
+
+    /* ✅ Animation */
+    animation: fadeIn 0.5s ease-in-out;
 }
 
 /* ===== PROGRESS BAR ===== */
@@ -118,22 +140,18 @@ tr:nth-child(even) {
     border-radius: 10px;
 }
 
-/* ===== MOBILE RESPONSIVE ===== */
+/* ===== MOBILE ===== */
 @media (max-width: 600px) {
     .box {
         width: 95%;
         padding: 25px;
     }
 
-    h1 {
-        font-size: 28px;
-    }
-
-    h2 {
-        font-size: 24px;
-    }
-
-    p {
-        font-size: 16px;
-    }
+    h1 { font-size: 28px; }
+    h2 { font-size: 24px; }
+    p { font-size: 16px; }
+}
+/* Glow on hover */
+button:hover {
+    box-shadow: 0 0 10px rgba(102,126,234,0.6);
 }
