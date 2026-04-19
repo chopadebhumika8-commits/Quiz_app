@@ -177,3 +177,13 @@ th {
         grid-template-columns: 1fr;
     }
 }
+
+/* ===== CERTIFICATE FIX ===== */
+.certificate {
+    position: relative;
+    overflow: hidden;
+}
+
+.certificate::before {
+    display: none !important;
+}
