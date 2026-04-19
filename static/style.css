@@ -1,90 +1,83 @@
-/* ===== GLOBAL ===== */
+/* ===== BODY ===== */
 body {
     margin: 0;
     font-family: 'Poppins', sans-serif;
     background: linear-gradient(135deg, #667eea, #764ba2);
+
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
 }
 
-/* ===== ANIMATION KEYFRAMES ===== */
+/* ===== ANIMATION ===== */
 @keyframes fadeIn {
     from {
         opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes buttonPop {
-    from {
         transform: scale(0.9);
     }
     to {
+        opacity: 1;
         transform: scale(1);
     }
 }
 
-/* ===== MAIN BOX ===== */
+/* ===== MAIN BOX (SQUARE LOOK) ===== */
 .box {
-    width: 90%;
-    max-width: 900px;
-    background: rgba(255,255,255,0.95);
-    padding: 35px;
-    border-radius: 20px;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.25);
-    text-align: center;
-    backdrop-filter: blur(10px);
+    width: 400px;              /* 🔥 FIXED WIDTH (square feel) */
+    min-height: 400px;         /* 🔥 FIXED HEIGHT */
 
-    /* ✅ Animation applied */
-    animation: fadeIn 0.7s ease-in-out;
+    background: rgba(255,255,255,0.95);
+    padding: 30px;
+    border-radius: 20px;
+
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+
+    text-align: center;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    animation: fadeIn 0.5s ease-in-out;
 }
 
 /* ===== HEADINGS ===== */
+h1 { font-size: 30px; }
+h2 { font-size: 24px; }
+h3 { font-size: 20px; }
+
 h1, h2, h3 {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     color: #333;
 }
 
-h1 { font-size: 36px; }
-h2 { font-size: 28px; }
-h3 { font-size: 22px; }
-
 /* ===== TEXT ===== */
 p {
-    font-size: 18px;
+    font-size: 16px;
     color: #444;
 }
 
 /* ===== INPUT ===== */
 input, select {
-    width: 90%;
-    padding: 12px;
-    margin: 10px 0;
-    border-radius: 10px;
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 8px;
     border: 1px solid #ccc;
-    font-size: 16px;
 }
 
 /* ===== BUTTON ===== */
 button {
-    padding: 12px 20px;
-    margin: 8px;
+    padding: 10px;
+    margin: 8px 0;
     border: none;
-    border-radius: 10px;
+    border-radius: 8px;
     background: #667eea;
     color: white;
-    font-size: 16px;
+    font-size: 14px;
     cursor: pointer;
     transition: 0.3s;
-
-    /* ✅ Button animation */
-    animation: buttonPop 0.4s ease;
 }
 
 button:hover {
@@ -95,13 +88,12 @@ button:hover {
 /* ===== TABLE ===== */
 table {
     width: 100%;
-    margin-top: 15px;
-    border-collapse: collapse;
+    font-size: 14px;
+    margin-top: 10px;
 }
 
 th, td {
-    padding: 12px;
-    font-size: 16px;
+    padding: 8px;
 }
 
 th {
@@ -109,49 +101,19 @@ th {
     color: white;
 }
 
-tr:nth-child(even) {
-    background: #f2f2f2;
-}
-
-/* ===== ANSWER CARD ===== */
+/* ===== ANSWERS ===== */
 .answer-card {
     text-align: left;
-    padding: 15px;
-    margin: 12px 0;
-    border-radius: 12px;
-    background: #f9f9f9;
-    border-left: 5px solid #667eea;
-
-    /* ✅ Animation */
-    animation: fadeIn 0.5s ease-in-out;
-}
-
-/* ===== PROGRESS BAR ===== */
-.progress-bar {
-    width: 100%;
-    background: #ddd;
-    border-radius: 10px;
-    margin: 10px 0;
-}
-
-.progress {
-    height: 12px;
-    background: #667eea;
-    border-radius: 10px;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 8px;
+    background: #f4f4f4;
 }
 
 /* ===== MOBILE ===== */
-@media (max-width: 600px) {
+@media (max-width: 500px) {
     .box {
-        width: 95%;
-        padding: 25px;
+        width: 90%;
+        min-height: auto;
     }
-
-    h1 { font-size: 28px; }
-    h2 { font-size: 24px; }
-    p { font-size: 16px; }
-}
-/* Glow on hover */
-button:hover {
-    box-shadow: 0 0 10px rgba(102,126,234,0.6);
 }
