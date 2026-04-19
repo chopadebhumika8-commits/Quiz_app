@@ -28,12 +28,7 @@ body {
 }
 </style>
 
-<!-- ✅ AUTO REDIRECT TO CERTIFICATE AFTER 3 SEC -->
-<script>
-setTimeout(function(){
-    window.location.href = "{{ url_for('certificate', score=score) }}";
-}, 3000);
-</script>
+
 
 </head>
 <body>
