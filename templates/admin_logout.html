@@ -6,19 +6,39 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
 
+<style>
+/* Reduce text size only for logout page */
+h2 {
+    font-size: 22px;   /* ✅ smaller title */
+    margin-bottom: 10px;
+}
+
+p {
+    font-size: 14px;   /* ✅ smaller message */
+    color: #444;
+}
+
+/* Button adjustment */
+button {
+    font-size: 14px;
+    padding: 10px 16px;
+}
+</style>
+
 </head>
+
 <body>
 
 <div class="box">
 
-<h2>🚪 Admin Logged Out</h2>
-<p>✅ You have successfully logged out.</p>
+    <h2>🚪 Admin Logged Out</h2>
+    <p>✅ You have successfully logged out.</p>
 
-<br>
+    <br>
 
-<a href="{{ url_for('admin_login') }}">
-    <button>🔐 Login Again</button>
-</a>
+    <a href="{{ url_for('admin_login') }}">
+        <button>🔐 Login Again</button>
+    </a>
 
 </div>
 
